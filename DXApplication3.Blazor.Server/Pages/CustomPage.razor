@@ -1,8 +1,11 @@
 ﻿@page "/custompage"
 @using static DXApplication3.Blazor.Server.Pages.CustomPage
 @inject HttpClient Http
+@inject IHttpContextAccessor HttpContextAccessor
 @inject IJSRuntime JS
 
+
+@using DXApplication3.Module.BusinessObjects
 @using DevExpress.ExpressApp
 @using DevExpress.ExpressApp.Core
 @using DevExpress.ExpressApp.Security
@@ -32,7 +35,7 @@ else
     <ul>
         @foreach (var item in employDtos)
         {
-            <li>@item.FirstName+" "+ @item.LastName</li>
+            <li>@item.FirstName - @item.LastName</li>
         }
     </ul>
 }
@@ -44,16 +47,10 @@ else
 
 
 
-    public class employDto
-    {
-        public string LastName { get; set; }
-        public string FirstName { get; set; }
-    }
-
-    private List<employDto>? employDtos;
+    private List<Employee>? employDtos;
 
 
-    protected override async Task OnInitializedAsync()
+    protected override async System.Threading.Tasks.Task OnInitializedAsync()
     {
 
 
@@ -65,12 +62,19 @@ else
                 // Sử dụng extension method trên INonSecuredObjectSpaceFactory
                 using var objectSpace = NonSecuredObjectSpaceFactory.CreateNonSecuredObjectSpace<PermissionPolicyUser>();  // Generic cho type user
                 var currentUser = objectSpace.GetObjectByKey<PermissionPolicyUser>(userId);  // Thay type nếu dùng custom user
-                currentUserName = currentUser?.UserName  ?? "Unknown";
+                currentUserName = currentUser?.UserName ?? "Unknown";
             }
             else
             {
                 currentUserName = "Người dùng chưa đăng nhập";
             }
+
+
+            //Goi native code
+            using var os = ObjectSpaceFactory.CreateObjectSpace(typeof(Employee));
+            var items = os.GetObjects<Employee>();
+            // xử lý trực tiếp luôn, không gọi API nữa
+            employDtos = os.GetObjects<Employee>().ToList();
         }
         catch (Exception ex)
         {
@@ -80,8 +84,8 @@ else
 
     }
 
-  
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+
+    protected override async System.Threading.Tasks.Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
@@ -96,29 +100,55 @@ else
             ");
 
             // Đợi chart.js load xong
-            await Task.Delay(500);
+            await System.Threading.Tasks.Task.Delay(500);
 
             // Gọi API
 
-            // Create handler to bypass SSL
+            // 1. Lấy cookie xác thực hiện tại
+            var authCookieName = ".AspNetCore.Cookies"; // hoặc tên cookie của bạn
+            var cookieValue = HttpContextAccessor.HttpContext.Request.Cookies[authCookieName];
+
+            // 2. Lấy URL API gốc tự động
+            var request = HttpContextAccessor.HttpContext.Request;
+            var baseUrl = $"{request.Scheme}://{request.Host.Value}";
+            // var baseUri = new Uri(baseUrl);
+            var baseUri = new Uri(NavigationManager.BaseUri);
+
+            Console.WriteLine($"cookieValue: {cookieValue}"); // Debug
+            Console.WriteLine($"baseUrl: {baseUrl}");
+
             var handler = new HttpClientHandler
                 {
+                    UseCookies = true,
                     ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
                 };
+            handler.CookieContainer = new System.Net.CookieContainer();
+            handler.CookieContainer.Add(
+               //new Uri(NavigationManager.BaseUri), // địa chỉ API
+               baseUri,
+                new System.Net.Cookie(authCookieName, cookieValue));
 
-            
+
+            // // Create handler to bypass SSL
+            // var handler = new HttpClientHandler
+            //     {
+            //         UseCookies=true,
+            //         CookieContainer =  new System.Net.CookieContainer(),
+            //         ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+            //     };
+
+
 
             // Create new HttpClient with handler and set BaseAddress
-            Http = new HttpClient(handler)
-                {
-                    BaseAddress = new Uri(NavigationManager.BaseUri) // Preserve BaseAddress
-                };
+            using var client = new HttpClient(handler);
+            client.BaseAddress = baseUri;
 
             Console.WriteLine($"BaseAddress: {Http.BaseAddress}"); // Debug
-            var data = await Http.GetFromJsonAsync<ChartData>("api/MyData/GetChartData");
+            var data = await client.GetFromJsonAsync<ChartData>("api/MyData/GetChartData");
 
-            // vi du goi api
-            employDtos = await Http.GetFromJsonAsync<List<employDto>>("/api/mydata/getemploy");
+            // vi du goi api van can auth
+            //employDtos = await client.GetFromJsonAsync<List<employDto>>("api/MyData/GetEmployee");
+ 
 
             // Render Chart
             var js = $@"

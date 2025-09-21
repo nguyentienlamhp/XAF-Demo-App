@@ -103,6 +103,7 @@ public class Startup {
                 .AddAuthenticationProvider<CustomAuthenticationProvider>();
         });
 
+
         const string customBearerSchemeName = "CustomBearer";
         var authentication = services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme);
         authentication
