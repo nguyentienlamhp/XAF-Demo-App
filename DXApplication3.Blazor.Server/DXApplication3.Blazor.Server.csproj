@@ -29,10 +29,10 @@
     <PackageReference Include="DevExpress.ExpressApp.FileAttachment.Blazor" Version="22.2.3" />
     <PackageReference Include="DevExpress.ExpressApp.ReportsV2.Blazor" Version="22.2.3" />
     <PackageReference Include="DevExpress.ExpressApp.Validation.Blazor" Version="22.2.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.0" />
+    <PackageReference Include="DevExpressMvvm" Version="24.1.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.36" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.4.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
-    <PackageReference Include="Microsoft.Identity.Web.UI" Version="1.5.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DXApplication3.Module\DXApplication3.Module.csproj" />

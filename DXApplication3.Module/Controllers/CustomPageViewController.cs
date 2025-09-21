@@ -21,12 +21,26 @@ namespace DXApplication3.Module.Controllers
         protected override void OnActivated()
         {
             base.OnActivated();
-            var navManager = (NavigationManager)Application.ServiceProvider.GetService(typeof(NavigationManager));
-            if (navManager != null)
+            try
             {
-                // Điều hướng sang Razor page
-                navManager.NavigateTo("/custompage", forceLoad: true);
+                var navManager = (NavigationManager)Application.ServiceProvider.GetService(typeof(NavigationManager));
+                if (navManager != null)
+                {
+                    // Điều hướng sang Razor page
+                    navManager.NavigateTo("/custompage", forceLoad: true);
+                }
             }
+            catch (Exception ex)
+            {
+                Application.ShowViewStrategy.ShowMessage(
+                     ex.Message,
+                     InformationType.Error,   // Success, Warning, Error, Info
+                     4000,                      // thời gian hiển thị (ms)
+                     InformationPosition.Top    // vị trí hiển thị (Top/Bottom)
+                 );
+
+            }
+
         }
     }
 }

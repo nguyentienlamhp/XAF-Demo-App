@@ -44,6 +44,7 @@
     <PackageReference Include="DevExpress.Persistent.BaseImpl.EFCore" Version="22.2.3" />
     <PackageReference Include="DevExpress.RichEdit.Export" Version="22.2.3" />
     <PackageReference Include="DevExpress.Win.Design" Version="22.2.3" />
+    <PackageReference Include="Microsoft.Identity.Web.UI" Version="3.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DXApplication3.Module\DXApplication3.Module.csproj" />
