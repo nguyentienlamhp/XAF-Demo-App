@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Application>
+  <ActionDesign>
+    <Actions>
+      <Action Id="Logon" Caption="Dang nhap" />
+    </Actions>
+  </ActionDesign>
+  <Views>
+    <DetailView Id="AuthenticationStandardLogonParameters_Blazor_DetailView" Caption="Dang nhap" />
+    <DetailView Id="AuthenticationStandardLogonParameters_DetailView" Caption="Dang nhap" />
+  </Views>
+</Application>

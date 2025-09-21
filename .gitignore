@@ -1,0 +1,61 @@
+# Visual Studio / .NET
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build
+bin/
+obj/
+[Bb]uild/
+[Bb]uildOutput/
+[Ll]og/
+
+# NuGet
+*.nupkg
+*.snupkg
+*.nuspec
+*.psmdcp
+packages/
+*.nuget.props
+*.nuget.targets
+
+# Rider
+.idea/
+*.iml
+
+# ASP.NET / Blazor Server logs
+wwwroot/lib/
+wwwroot/dist/
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# User secrets / Config
+appsettings.Development.json
+secrets.json
+
+# XAF specific (model cache)
+ModelAssembly.dll
+Model.DesignedDiffs.xafml
+Model.User.xafml
+Modules\**\Model.DesignedDiffs.xafml
+Modules\**\Model.User.xafml
+
+# Publish outputs
+publish/
+PublishProfiles/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.log
+*.dbmdl
+
+# Others
+_Dependencies/
+_ReSharper.Caches/
+*.resharper
+*.DotSettings.user

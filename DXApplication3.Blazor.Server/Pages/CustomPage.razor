@@ -1,0 +1,147 @@
+﻿@page "/custompage"
+@using static DXApplication3.Blazor.Server.Pages.CustomPage
+@inject HttpClient Http
+@inject IJSRuntime JS
+
+@using DevExpress.ExpressApp
+@using DevExpress.ExpressApp.Core
+@using DevExpress.ExpressApp.Security
+@using DevExpress.Persistent.BaseImpl.EF.PermissionPolicy
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
+@inject ISecurityProvider SecurityProvider
+@inject IObjectSpaceFactory ObjectSpaceFactory  // Nếu cần load full user object
+@inject INonSecuredObjectSpaceFactory NonSecuredObjectSpaceFactory
+@inject NavigationManager NavigationManager
+
+
+<h3>Trang Custom với Chart.js</h3>
+
+<p>Xin chào: @currentUserName</p>
+
+<canvas id="myChart" width="400" height="200"></canvas>
+
+
+<h3>Dữ liệu từ API</h3>
+
+@if (employDtos == null)
+{
+    <p><em>Đang tải dữ liệu…</em></p>
+}
+else
+{
+    <ul>
+        @foreach (var item in employDtos)
+        {
+            <li>@item.FirstName+" "+ @item.LastName</li>
+        }
+    </ul>
+}
+
+
+@code {
+
+    private String? currentUserName;
+
+
+
+    public class employDto
+    {
+        public string LastName { get; set; }
+        public string FirstName { get; set; }
+    }
+
+    private List<employDto>? employDtos;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+
+
+        try
+        {
+            var userId = SecurityProvider.GetSecurity().UserId;
+            if (userId != null)
+            {
+                // Sử dụng extension method trên INonSecuredObjectSpaceFactory
+                using var objectSpace = NonSecuredObjectSpaceFactory.CreateNonSecuredObjectSpace<PermissionPolicyUser>();  // Generic cho type user
+                var currentUser = objectSpace.GetObjectByKey<PermissionPolicyUser>(userId);  // Thay type nếu dùng custom user
+                currentUserName = currentUser?.UserName  ?? "Unknown";
+            }
+            else
+            {
+                currentUserName = "Người dùng chưa đăng nhập";
+            }
+        }
+        catch (Exception ex)
+        {
+            currentUserName = $"Lỗi: {ex.Message}";
+        }
+
+
+    }
+
+  
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Load Chart.js
+            await JS.InvokeVoidAsync("eval", @"
+                if(!window.ChartLoaded){
+                  var script = document.createElement('script');
+                  script.src='https://cdn.jsdelivr.net/npm/chart.js';
+                  script.onload=function(){ window.ChartLoaded=true; };
+                  document.head.appendChild(script);
+                }
+            ");
+
+            // Đợi chart.js load xong
+            await Task.Delay(500);
+
+            // Gọi API
+
+            // Create handler to bypass SSL
+            var handler = new HttpClientHandler
+                {
+                    ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+                };
+
+            
+
+            // Create new HttpClient with handler and set BaseAddress
+            Http = new HttpClient(handler)
+                {
+                    BaseAddress = new Uri(NavigationManager.BaseUri) // Preserve BaseAddress
+                };
+
+            Console.WriteLine($"BaseAddress: {Http.BaseAddress}"); // Debug
+            var data = await Http.GetFromJsonAsync<ChartData>("api/MyData/GetChartData");
+
+            // vi du goi api
+            employDtos = await Http.GetFromJsonAsync<List<employDto>>("/api/mydata/getemploy");
+
+            // Render Chart
+            var js = $@"
+              const ctx = document.getElementById('myChart');
+              new Chart(ctx, {{
+                type: 'bar',
+                data: {{
+                  labels: {System.Text.Json.JsonSerializer.Serialize(data.Labels)},
+                  datasets: [{{
+                    label: 'Demo',
+                    data: {System.Text.Json.JsonSerializer.Serialize(data.Values)}
+                  }}]
+                }}
+              }});
+            ";
+
+            await JS.InvokeVoidAsync("eval", js);
+        }
+    }
+
+    class ChartData
+    {
+        public string[] Labels { get; set; }
+        public int[] Values { get; set; }
+    }
+}
