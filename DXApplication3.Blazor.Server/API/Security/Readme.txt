@@ -19,3 +19,8 @@ https://learn.microsoft.com/en-us/aspnet/core/security/authentication/
 
 Security System Module
 https://docs.devexpress.com/eXpressAppFramework/113591/
+
+//Lay token
+curl --location 'https://localhost:44318/api/Authentication/Authenticate' \
+--header 'Content-Type: application/json' \
+--data '{"Username":"quanly1","Password":"123456"}'
