@@ -13,7 +13,7 @@ namespace DXApplication3.Blazor.Server;
 
 public class DXApplication3BlazorApplication : BlazorApplication {
     public DXApplication3BlazorApplication() {
-        ApplicationName = "DXApplication3";
+        ApplicationName = "Ứng dụng demo";
         CheckCompatibilityType = DevExpress.ExpressApp.CheckCompatibilityType.DatabaseSchema;
         DatabaseVersionMismatch += DXApplication3BlazorApplication_DatabaseVersionMismatch;
     }

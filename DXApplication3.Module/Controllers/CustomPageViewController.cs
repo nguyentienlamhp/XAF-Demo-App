@@ -27,7 +27,7 @@ namespace DXApplication3.Module.Controllers
                 if (navManager != null)
                 {
                     // Điều hướng sang Razor page
-                    navManager.NavigateTo("/custompage", forceLoad: true);
+                    navManager.NavigateTo("/custompage", forceLoad: true, replace: true);
                 }
             }
             catch (Exception ex)

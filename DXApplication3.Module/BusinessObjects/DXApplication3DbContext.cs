@@ -56,7 +56,9 @@ public class DXApplication3DesignTimeDbContextFactory : IDesignTimeDbContextFact
         var optionsBuilder = new DbContextOptionsBuilder<DXApplication3EFCoreDbContext>();
 
         // 🟢 PostgreSQL connection string
-        optionsBuilder.UseNpgsql("Host=db.yejizukiljbbwdvipyvh.supabase.co;Database=postgres;Username=postgres;Password=Demama@2023;SSL Mode=Require;Trust Server Certificate=true");
+        //optionsBuilder.UseNpgsql("Host=db.yejizukiljbbwdvipyvh.supabase.co;Database=postgres;Username=postgres;Password=Demama@2023;SSL Mode=Require;Trust Server Certificate=true");
+        //neon.tech
+        optionsBuilder.UseNpgsql("Host=ep-plain-hall-a1ko9d1j-pooler.ap-southeast-1.aws.neon.tech;Database=database-01;Username=neondb_owner;Password=npg_0ly1PDeEAMIK;SSL Mode=Require;Trust Server Certificate=true");
 
         // XAF proxies (vẫn giữ nguyên)
         optionsBuilder.UseChangeTrackingProxies();

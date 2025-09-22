@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DXApplication3.Module.Migrations
 {
     [DbContext(typeof(DXApplication3EFCoreDbContext))]
-    [Migration("20250919131240_FixDB-1")]
-    partial class FixDB1
+    [Migration("20250922142828_FixDB-6")]
+    partial class FixDB6
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

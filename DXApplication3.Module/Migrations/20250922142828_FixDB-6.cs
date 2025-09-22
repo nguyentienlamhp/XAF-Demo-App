@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DXApplication3.Module.Migrations
 {
-    public partial class FixDB8 : Migration
+    public partial class FixDB6 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -43,7 +43,7 @@ namespace DXApplication3.Module.Migrations
                 {
                     ID = table.Column<Guid>(type: "uuid", nullable: false),
                     Action = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    Timestamp = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Timestamp = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     UserName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     ObjectType = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     ObjectId = table.Column<Guid>(type: "uuid", nullable: false),
@@ -125,7 +125,7 @@ namespace DXApplication3.Module.Migrations
                     ID = table.Column<Guid>(type: "uuid", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false),
                     Subject = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
-                    DueDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    DueDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
                 {
