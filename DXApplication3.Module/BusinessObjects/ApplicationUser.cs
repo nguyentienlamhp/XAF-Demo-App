@@ -25,4 +25,6 @@ public class ApplicationUser : PermissionPolicyUser, ISecurityUserWithLoginInfo 
         result.User = this;
         return result;
     }
+
+    public virtual IList<BaiViet> BaiViets { get; set; } = new ObservableCollection<BaiViet>();
 }

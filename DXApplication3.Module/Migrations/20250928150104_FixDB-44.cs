@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DXApplication3.Module.Migrations
 {
-    public partial class FixDB6 : Migration
+    public partial class FixDB44 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -42,7 +42,7 @@ namespace DXApplication3.Module.Migrations
                 columns: table => new
                 {
                     ID = table.Column<Guid>(type: "uuid", nullable: false),
-                    Action = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Action = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     Timestamp = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     UserName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     ObjectType = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
@@ -116,6 +116,22 @@ namespace DXApplication3.Module.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ReportDataV2", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StateMachines",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    Active = table.Column<bool>(type: "boolean", nullable: false),
+                    TargetObjectTypeName = table.Column<string>(type: "text", nullable: true),
+                    StatePropertyNameBase = table.Column<string>(type: "text", nullable: true),
+                    ExpandActionsInDetailView = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StateMachines", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -214,6 +230,27 @@ namespace DXApplication3.Module.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BaiViets",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    TieuDe = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
+                    NoiDung = table.Column<string>(type: "text", nullable: true),
+                    TrangThai = table.Column<int>(type: "integer", nullable: false),
+                    NguoiTaoID = table.Column<Guid>(type: "uuid", nullable: true),
+                    NgayTao = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BaiViets", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BaiViets_PermissionPolicyUser_NguoiTaoID",
+                        column: x => x.NguoiTaoID,
+                        principalTable: "PermissionPolicyUser",
+                        principalColumn: "ID");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PermissionPolicyRolePermissionPolicyUser",
                 columns: table => new
                 {
@@ -255,6 +292,26 @@ namespace DXApplication3.Module.Migrations
                         principalTable: "PermissionPolicyUser",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StateMachineStates",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "uuid", nullable: false),
+                    StateMachineID = table.Column<Guid>(type: "uuid", nullable: true),
+                    Caption = table.Column<string>(type: "text", nullable: true),
+                    MarkerValue = table.Column<string>(type: "text", nullable: true),
+                    TargetObjectCriteria = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StateMachineStates", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_StateMachineStates_StateMachines_StateMachineID",
+                        column: x => x.StateMachineID,
+                        principalTable: "StateMachines",
+                        principalColumn: "ID");
                 });
 
             migrationBuilder.CreateTable(
@@ -319,6 +376,65 @@ namespace DXApplication3.Module.Migrations
                         principalColumn: "ID");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "StateMachineAppearance",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "uuid", nullable: false),
+                    TargetItems = table.Column<string>(type: "text", nullable: true),
+                    AppearanceItemType = table.Column<string>(type: "text", nullable: true),
+                    Criteria = table.Column<string>(type: "text", nullable: true),
+                    Context = table.Column<string>(type: "text", nullable: true),
+                    Priority = table.Column<int>(type: "integer", nullable: false),
+                    FontStyle = table.Column<int>(type: "integer", nullable: true),
+                    FontColorInt = table.Column<int>(type: "integer", nullable: false),
+                    BackColorInt = table.Column<int>(type: "integer", nullable: false),
+                    Visibility = table.Column<int>(type: "integer", nullable: true),
+                    Enabled = table.Column<bool>(type: "boolean", nullable: true),
+                    Method = table.Column<string>(type: "text", nullable: true),
+                    StateID = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StateMachineAppearance", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_StateMachineAppearance_StateMachineStates_StateID",
+                        column: x => x.StateID,
+                        principalTable: "StateMachineStates",
+                        principalColumn: "ID");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StateMachineTransitions",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "uuid", nullable: false),
+                    Caption = table.Column<string>(type: "text", nullable: true),
+                    SourceStateID = table.Column<Guid>(type: "uuid", nullable: true),
+                    TargetStateID = table.Column<Guid>(type: "uuid", nullable: true),
+                    Index = table.Column<int>(type: "integer", nullable: false),
+                    SaveAndCloseView = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StateMachineTransitions", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_StateMachineTransitions_StateMachineStates_SourceStateID",
+                        column: x => x.SourceStateID,
+                        principalTable: "StateMachineStates",
+                        principalColumn: "ID");
+                    table.ForeignKey(
+                        name: "FK_StateMachineTransitions_StateMachineStates_TargetStateID",
+                        column: x => x.TargetStateID,
+                        principalTable: "StateMachineStates",
+                        principalColumn: "ID");
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BaiViets_NguoiTaoID",
+                table: "BaiViets",
+                column: "NguoiTaoID");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Employee_TaskID",
                 table: "Employee",
@@ -369,10 +485,33 @@ namespace DXApplication3.Module.Migrations
                 name: "IX_PermissionPolicyUserLoginInfo_UserForeignKey",
                 table: "PermissionPolicyUserLoginInfo",
                 column: "UserForeignKey");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StateMachineAppearance_StateID",
+                table: "StateMachineAppearance",
+                column: "StateID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StateMachineStates_StateMachineID",
+                table: "StateMachineStates",
+                column: "StateMachineID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StateMachineTransitions_SourceStateID",
+                table: "StateMachineTransitions",
+                column: "SourceStateID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StateMachineTransitions_TargetStateID",
+                table: "StateMachineTransitions",
+                column: "TargetStateID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "BaiViets");
+
             migrationBuilder.DropTable(
                 name: "DashboardData");
 
@@ -410,6 +549,12 @@ namespace DXApplication3.Module.Migrations
                 name: "ReportDataV2");
 
             migrationBuilder.DropTable(
+                name: "StateMachineAppearance");
+
+            migrationBuilder.DropTable(
+                name: "StateMachineTransitions");
+
+            migrationBuilder.DropTable(
                 name: "Task");
 
             migrationBuilder.DropTable(
@@ -422,7 +567,13 @@ namespace DXApplication3.Module.Migrations
                 name: "PermissionPolicyUser");
 
             migrationBuilder.DropTable(
+                name: "StateMachineStates");
+
+            migrationBuilder.DropTable(
                 name: "PermissionPolicyRoleBase");
+
+            migrationBuilder.DropTable(
+                name: "StateMachines");
         }
     }
 }

@@ -6,6 +6,7 @@ using DevExpress.Persistent.BaseImpl.EF;
 using DevExpress.ExpressApp.Design;
 using DevExpress.ExpressApp.EFCore.DesignTime;
 using Castle.Core.Resource;
+using DevExpress.Persistent.BaseImpl.EF.StateMachine;
 
 namespace DXApplication3.Module.BusinessObjects;
 
@@ -83,10 +84,17 @@ public class DXApplication3EFCoreDbContext : DbContext {
 
     public DbSet<Employee> Employee { get; set; }
     //public DbSet<TaskAssignment> TaskAssignment { get; set; }
-
+    //Dang ky bai viet
+    public DbSet<BaiViet> BaiViets { get; set; }
     public DbSet<HistoryLog> HistoryLogs { get; set; }
 
     public DbSet<Task> Task { get; set; }
+
+    //Dang ký StateMachine
+    public DbSet<StateMachine> StateMachines { get; set; }
+    public DbSet<StateMachineState> StateMachineStates { get; set; }
+    public DbSet<StateMachineTransition> StateMachineTransitions { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
         base.OnModelCreating(modelBuilder);
@@ -108,6 +116,23 @@ public class DXApplication3EFCoreDbContext : DbContext {
                 }
             }
         }
+
+        // Đăng ký thêm các entity StateMachine
+        // Chỉ ignore property có thật
+        modelBuilder.Entity<StateMachine>()
+            .Ignore(sm => sm.StartState);
+
+
+        //modelBuilder.Entity<StateMachine>();
+        //modelBuilder.Entity<StateMachineState>();
+        //modelBuilder.Entity<StateMachineTransition>();
+        // Cấu hình quan hệ giữa StateMachine và StateMachineState cho StartState
+        //modelBuilder.Entity<StateMachine>()
+        //    .HasOne(sm => sm.StartState) // navigation property
+        //    .WithMany() // không có navigation ngược
+        //    .HasForeignKey("StartStateId") // tên cột khóa ngoại
+        //    .OnDelete(DeleteBehavior.Restrict); // tránh delete cascade vòng lặp
+
         modelBuilder.HasChangeTrackingStrategy(ChangeTrackingStrategy.ChangingAndChangedNotificationsWithOriginalValues);
         modelBuilder.Entity<DXApplication3.Module.BusinessObjects.ApplicationUserLoginInfo>(b => {
             b.HasIndex(nameof(DevExpress.ExpressApp.Security.ISecurityUserLoginInfo.LoginProviderName), nameof(DevExpress.ExpressApp.Security.ISecurityUserLoginInfo.ProviderUserKey)).IsUnique();

@@ -11,6 +11,8 @@ using DevExpress.ExpressApp.Model.DomainLogics;
 using DevExpress.ExpressApp.Model.NodeGenerators;
 using DevExpress.ExpressApp.ReportsV2;
 using DXApplication3.Module.BusinessObjects;
+using DevExpress.ExpressApp.StateMachine;
+using DXApplication3.Module.Workflows;
 
 namespace DXApplication3.Module;
 
@@ -36,6 +38,8 @@ public sealed class DXApplication3Module : ModuleBase {
 		AdditionalExportedTypes.Add(typeof(DevExpress.Persistent.BaseImpl.EF.FileAttachment));
         //Nếu là non-persistent object bạn cần đăng ký trong Module.cs:
         AdditionalExportedTypes.Add(typeof(CustomPageViewModel));
+        //kich hoat StateMachine 
+        RequiredModuleTypes.Add(typeof(DevExpress.ExpressApp.StateMachine.StateMachineModule));
     }
     public override IEnumerable<ModuleUpdater> GetModuleUpdaters(IObjectSpace objectSpace, Version versionFromDB) {
         ModuleUpdater updater = new DatabaseUpdate.Updater(objectSpace, versionFromDB);
@@ -43,7 +47,37 @@ public sealed class DXApplication3Module : ModuleBase {
     }
     public override void Setup(XafApplication application) {
         base.Setup(application);
+
+        //Kích hoạt StateMachine Module
+        //application.Modules.Add(new StateMachineModule()); // Kích hoạt StateMachine Module
+
+        //application.SetupComplete += (s, e) =>
+        //{
+        //    var objectSpace = application.CreateObjectSpace();
+        //    new DuyetBaiStateMachine().Register(objectSpace);
+        //};
+
         // Manage various aspects of the application UI and behavior at the module level.
+
+        // đăng ký event tại đây cho view tuy chinh de tu sinh detailview
+        //application.ObjectSpaceCreated += (s, e) => {
+        //    if (e.ObjectSpace is NonPersistentObjectSpace npos)
+        //    {
+        //        npos.ObjectsGetting += (sender, args) => {
+        //            if (args.ObjectType == typeof(MyCustomData))
+        //            {
+        //                var os = Application.CreateObjectSpace(typeof(OtherTable));
+        //                var otherData = os.GetObjects<OtherTable>().Where(o => o.IsActive)
+        //                    .Select(x => new MyCustomData
+        //                    {
+        //                        Name = x.Name,
+        //                        Address = x.Address
+        //                    }).ToList();
+        //                args.Objects = otherData;
+        //            }
+        //        };
+        //    }
+        //};
     }
     public override void Setup(ApplicationModulesManager moduleManager) {
         base.Setup(moduleManager);

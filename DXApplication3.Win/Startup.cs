@@ -34,7 +34,10 @@ public class ApplicationBuilder : IDesignTimeApplicationFactory {
                 options.AllowValidationDetailsAccess = false;
             })
             .Add<DXApplication3.Module.DXApplication3Module>()
-        	.Add<DXApplication3WinModule>();
+        	.Add<DXApplication3WinModule>()
+             //StateMachineModule
+             //.Add<DevExpress.ExpressApp.StateMachine.StateMachineModule>();
+        
         builder.ObjectSpaceProviders
             .AddSecuredEFCore().WithDbContext<DXApplication3.Module.BusinessObjects.DXApplication3EFCoreDbContext>((application, options) => {
                 // Uncomment this code to use an in-memory database. This database is recreated each time the server starts. With the in-memory database, you don't need to make a migration when the data model is changed.
