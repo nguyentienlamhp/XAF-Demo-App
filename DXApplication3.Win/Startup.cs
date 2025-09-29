@@ -20,23 +20,26 @@ public class ApplicationBuilder : IDesignTimeApplicationFactory {
         builder.UseApplication<DXApplication3WindowsFormsApplication>();
         builder.Modules
             .AddConditionalAppearance()
-            .AddDashboards(options => {
+            .AddDashboards(options =>
+            {
                 options.DashboardDataType = typeof(DevExpress.Persistent.BaseImpl.EF.DashboardData);
                 options.DesignerFormStyle = DevExpress.XtraBars.Ribbon.RibbonFormStyle.Ribbon;
             })
             .AddFileAttachments()
-            .AddReports(options => {
+            .AddReports(options =>
+            {
                 options.EnableInplaceReports = true;
                 options.ReportDataType = typeof(DevExpress.Persistent.BaseImpl.EF.ReportDataV2);
                 options.ReportStoreMode = DevExpress.ExpressApp.ReportsV2.ReportStoreModes.XML;
             })
-            .AddValidation(options => {
+            .AddValidation(options =>
+            {
                 options.AllowValidationDetailsAccess = false;
             })
             .Add<DXApplication3.Module.DXApplication3Module>()
-        	.Add<DXApplication3WinModule>()
+            .Add<DXApplication3WinModule>()
              //StateMachineModule
-             //.Add<DevExpress.ExpressApp.StateMachine.StateMachineModule>();
+             .Add<DevExpress.ExpressApp.StateMachine.StateMachineModule>();
         
         builder.ObjectSpaceProviders
             .AddSecuredEFCore().WithDbContext<DXApplication3.Module.BusinessObjects.DXApplication3EFCoreDbContext>((application, options) => {

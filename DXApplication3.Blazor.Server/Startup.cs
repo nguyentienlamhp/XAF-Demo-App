@@ -49,22 +49,25 @@ public class Startup {
 
             builder.Modules
                 .AddConditionalAppearance()
-                .AddDashboards(options => {
+                .AddDashboards(options =>
+                {
                     options.DashboardDataType = typeof(DevExpress.Persistent.BaseImpl.EF.DashboardData);
                 })
                 .AddFileAttachments()
-                .AddReports(options => {
+                .AddReports(options =>
+                {
                     options.EnableInplaceReports = true;
                     options.ReportDataType = typeof(DevExpress.Persistent.BaseImpl.EF.ReportDataV2);
                     options.ReportStoreMode = DevExpress.ExpressApp.ReportsV2.ReportStoreModes.XML;
                 })
-                .AddValidation(options => {
+                .AddValidation(options =>
+                {
                     options.AllowValidationDetailsAccess = false;
                 })
                 .Add<DXApplication3.Module.DXApplication3Module>()
-            	.Add<DXApplication3BlazorModule>()
+                .Add<DXApplication3BlazorModule>()
                 //them StateMachineModule
-                //.Add<DevExpress.ExpressApp.StateMachine.StateMachineModule>();
+                .Add<DevExpress.ExpressApp.StateMachine.StateMachineModule>();
             
 
 
