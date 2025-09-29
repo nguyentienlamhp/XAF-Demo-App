@@ -96,6 +96,7 @@ public class DXApplication3EFCoreDbContext : DbContext {
     public DbSet<StateMachineTransition> StateMachineTransitions { get; set; }
 
 
+
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
         base.OnModelCreating(modelBuilder);
         //ep kieu postgres

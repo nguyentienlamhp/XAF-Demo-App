@@ -40,6 +40,8 @@ public sealed class DXApplication3Module : ModuleBase {
         AdditionalExportedTypes.Add(typeof(CustomPageViewModel));
         //kich hoat StateMachine 
         RequiredModuleTypes.Add(typeof(DevExpress.ExpressApp.StateMachine.StateMachineModule));
+        //RequiredModuleTypes.Add(typeof(DevExpress.ExpressApp.EFCore.EFCoreModule));// EF support
+
     }
     public override IEnumerable<ModuleUpdater> GetModuleUpdaters(IObjectSpace objectSpace, Version versionFromDB) {
         ModuleUpdater updater = new DatabaseUpdate.Updater(objectSpace, versionFromDB);
@@ -47,6 +49,16 @@ public sealed class DXApplication3Module : ModuleBase {
     }
     public override void Setup(XafApplication application) {
         base.Setup(application);
+
+        //Thiet lap quy trinh bai viet
+        // Khi ObjectSpace đã tạo xong mới gọi
+        application.ObjectSpaceCreated += (s, e) => {
+            if (e.ObjectSpace is not NonPersistentObjectSpace)
+            {
+                // Tạo quy trình trong DB nếu chưa có
+                DuyetBaiStateMachineHelper.Create(e.ObjectSpace);
+            }
+        };
 
         //Kích hoạt StateMachine Module
         //application.Modules.Add(new StateMachineModule()); // Kích hoạt StateMachine Module

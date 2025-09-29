@@ -11,68 +11,113 @@ using DevExpress.Data.Filtering;
 using DevExpress.Persistent.BaseImpl.EF.PermissionPolicy;
 using DevExpress.Persistent.BaseImpl.EF.StateMachine;
 using DevExpress.ExpressApp.Utils;
+using DevExpress.ExpressApp.StateMachine.NonPersistent;
 
 namespace DXApplication3.Module.Workflows
 {
-    public class DuyetBaiStateMachine : IStateMachineProvider
+    public static class DuyetBaiStateMachineHelper
     {
-        public IList<IStateMachine> GetStateMachines()
+         public static void Create(IObjectSpace objectSpace)
         {
-            throw new NotImplementedException();
+            // Tránh tạo lại nhiều lần
+            if (objectSpace.GetObjects<StateMachine>()
+                           .Any(sm => sm.Name == "Quy trình bài viết"))
+                return;
+
+            var sm = objectSpace.CreateObject<StateMachine>();
+            sm.Name = "Quy trình bài viết";
+            sm.TargetObjectType = typeof(BaiViet);
+            sm.StatePropertyName = new StringObject("TrangThai"); // property enum
+
+            // 🟩 Trạng thái – Caption phải trùng tên enum
+            var draft = objectSpace.CreateObject<StateMachineState>();
+            draft.Caption = WorkflowState.Draft.ToString();
+            draft.StateMachine = sm;
+
+            var pending = objectSpace.CreateObject<StateMachineState>();
+            pending.Caption = WorkflowState.Pending.ToString();
+            pending.StateMachine = sm;
+
+            var approved = objectSpace.CreateObject<StateMachineState>();
+            approved.Caption = WorkflowState.Approved.ToString();
+            approved.StateMachine = sm;
+
+            var rejected = objectSpace.CreateObject<StateMachineState>();
+            rejected.Caption = WorkflowState.Rejected.ToString();
+            rejected.StateMachine = sm;
+
+            var published = objectSpace.CreateObject<StateMachineState>();
+            published.Caption = WorkflowState.Published.ToString();
+            published.StateMachine = sm;
+
+            // Trạng thái bắt đầu
+            sm.StartState = draft;
+
+            // 🟩 Các chuyển trạng thái
+            // Draft -> Pending
+            var t1 = objectSpace.CreateObject<StateMachineTransition>();
+            t1.SourceState = draft;
+            t1.TargetState = pending;
+            t1.Caption = "Gửi duyệt";
+
+            // Pending -> Approved
+            var t2 = objectSpace.CreateObject<StateMachineTransition>();
+            t2.SourceState = pending;
+            t2.TargetState = approved;
+            t2.Caption = "Duyệt bài";
+
+            // Pending -> Rejected
+            var t3 = objectSpace.CreateObject<StateMachineTransition>();
+            t3.SourceState = pending;
+            t3.TargetState = rejected;
+            t3.Caption = "Từ chối";
+
+            // Approved -> Published
+            var t4 = objectSpace.CreateObject<StateMachineTransition>();
+            t4.SourceState = approved;
+            t4.TargetState = published;
+            t4.Caption = "Xuất bản";
+
+            objectSpace.CommitChanges();
         }
-
-
-        public void Register(IObjectSpace objectSpace)
+        public static void CreateWithString(IObjectSpace objectSpace)
         {
-            var stateMachine = objectSpace.CreateObject<StateMachine>();
-            stateMachine.Name = "DuyetBaiStateMachine";
-            stateMachine.StatePropertyName = new StringObject(nameof(BaiViet.TrangThai));
-            stateMachine.TargetObjectType = typeof(BaiViet);
+            if (objectSpace.GetObjects<StateMachine>().Count > 0)
+                return; // tránh tạo lại nhiều lần
+            // Tạo StateMachine
+            var sm = objectSpace.CreateObject<StateMachine>();
+            sm.Name = "Quy trình bài viết";
+            sm.TargetObjectType = typeof(BaiViet);
+            sm.StatePropertyName = new StringObject("TrangThai");
 
-            var draftState = CreateState(objectSpace, stateMachine, "Draft", "Bản nháp");
-            var pendingState = CreateState(objectSpace, stateMachine, "Pending", "Chờ duyệt");
-            var approvedState = CreateState(objectSpace, stateMachine, "Approved", "Đã duyệt");
-            var rejectedState = CreateState(objectSpace, stateMachine, "Rejected", "Bị từ chối");
-            var publishedState = CreateState(objectSpace, stateMachine, "Published", "Đã xuất bản");
+            // Trạng thái
+            var stateChoDuyet = objectSpace.CreateObject<StateMachineState>();
+            stateChoDuyet.Caption = "Chờ duyệt";
+            stateChoDuyet.StateMachine = sm;
 
-            CreateTransition(objectSpace, draftState, pendingState, "Gửi duyệt", "Tác giả");
-            CreateTransition(objectSpace, pendingState, approvedState, "Duyệt sơ bộ", "Biên tập viên");
-            CreateTransition(objectSpace, pendingState, rejectedState, "Từ chối", "Biên tập viên");
-            CreateTransition(objectSpace, approvedState, publishedState, "Xuất bản", "Trưởng ban");
-            CreateTransition(objectSpace, approvedState, rejectedState, "Từ chối", "Trưởng ban");
+            var stateDaDuyet = objectSpace.CreateObject<StateMachineState>();
+            stateDaDuyet.Caption = "Đã duyệt";
+            stateDaDuyet.StateMachine = sm;
 
-            //objectSpace.CommitChanges();
-        }
+            var stateXuatBan = objectSpace.CreateObject<StateMachineState>();
+            stateXuatBan.Caption = "Xuất bản";
+            stateXuatBan.StateMachine = sm;
 
+            sm.StartState = stateChoDuyet;
 
-        private StateMachineState CreateState(
-     IObjectSpace objectSpace,
-     StateMachine stateMachine,
-     string stateValue,
-     string caption)
-        {
-            var state = objectSpace.CreateObject<StateMachineState>();
-            state.StateMachine = stateMachine;
-            //state.StatePropertyValue = stateValue;  // giá trị enum hoặc string thực lưu trong BaiViet.TrangThai
-            state.Caption = caption;                // nhãn hiển thị
-            return state;
-        }
+            // Transition Chờ duyệt → Đã duyệt
+            var trans1 = objectSpace.CreateObject<StateMachineTransition>();
+            trans1.SourceState = stateChoDuyet;
+            trans1.TargetState = stateDaDuyet;
+            trans1.Caption = "Duyệt bài";
 
-        private void CreateTransition(IObjectSpace objectSpace,
-    StateMachineState sourceState,
-    StateMachineState targetState,
-    string caption,
-    string roleName)
-        {
-            var transition = objectSpace.CreateObject<StateMachineTransition>();
-            transition.SourceState = sourceState;
-            transition.TargetState = targetState;
-            transition.Caption = caption;
+            // Transition Đã duyệt → Xuất bản
+            var trans2 = objectSpace.CreateObject<StateMachineTransition>();
+            trans2.SourceState = stateDaDuyet;
+            trans2.TargetState = stateXuatBan;
+            trans2.Caption = "Xuất bản";
 
-            //var securityRole = objectSpace.FindObject<PermissionPolicyRole>(
-            //    CriteriaOperator.Parse("Name = ?", roleName));
-            //if (securityRole != null)
-            //    transition.Roles.Add(securityRole);
+            objectSpace.CommitChanges();
         }
     }
 }

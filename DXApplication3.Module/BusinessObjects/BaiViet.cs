@@ -21,6 +21,9 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace DXApplication3.Module.BusinessObjects
 {
+    // IXafEntityObject
+    //Định nghĩa: IXafEntityObject là một interface của XAF dùng để làm việc với các Entity Framework entities.
+    //Ý nghĩa: Khi bạn muốn tích hợp EF entities vào XAF, bạn có thể triển khai interface này để XAF biết cách quản lý lifecycle của entity.
     [DefaultClassOptions]
     public class BaiViet : IXafEntityObject
     {

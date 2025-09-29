@@ -29,6 +29,14 @@ Debugging, Unit and Functional Testing
 https://docs.devexpress.com/eXpressAppFramework/112572
 
 
+
+Install-Package DevExpress.ExpressApp.StateMachine -Version 22.2.3
+Install-Package DevExpress.ExpressApp.EF -Version 22.2.3
+Install-Package DevExpress.Persistent.BaseImpl.EF -Version 22.2.3
+
+
+
+
 OK 👍 mình sẽ hướng dẫn bạn **từng bước** để có State Machine (workflow phê duyệt) cho `BaiViet` trong **XAF EF** — có nút duyệt trạng thái và tự check quyền dựa trên Role.
 
 ---
