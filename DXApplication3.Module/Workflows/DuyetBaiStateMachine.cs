@@ -17,7 +17,17 @@ namespace DXApplication3.Module.Workflows
 {
     public static class DuyetBaiStateMachineHelper
     {
-         public static void Create(IObjectSpace objectSpace)
+
+        private static void CreateTransition(IObjectSpace os, StateMachineState source, StateMachineState target, string caption)
+        {
+            var t = os.CreateObject<StateMachineTransition>();
+            t.SourceState = source;
+            t.TargetState = target;
+            t.Caption = caption;
+        }
+         
+
+        public static void Create1(IObjectSpace objectSpace)
         {
             // Tránh tạo lại nhiều lần
             if (objectSpace.GetObjects<StateMachine>()
@@ -27,7 +37,7 @@ namespace DXApplication3.Module.Workflows
             var sm = objectSpace.CreateObject<StateMachine>();
             sm.Name = "Quy trình bài viết";
             sm.TargetObjectType = typeof(BaiViet);
-            sm.StatePropertyName = new StringObject("TrangThai"); // property enum
+            sm.StatePropertyName = new DevExpress.ExpressApp.Utils.StringObject(nameof(BaiViet.TrangThai)); //new StringObject("TrangThai"); // property enum
 
             // 🟩 Trạng thái – Caption phải trùng tên enum
             var draft = objectSpace.CreateObject<StateMachineState>();
@@ -119,5 +129,48 @@ namespace DXApplication3.Module.Workflows
 
             objectSpace.CommitChanges();
         }
+
+        internal static void Create(IObjectSpace objectSpace)
+        {
+            if (objectSpace.GetObjects<StateMachine>().Any(sm => sm.Name == "Quy trình bài viết"))
+                return;
+
+            var sm = objectSpace.CreateObject<StateMachine>();
+            sm.Name = "Quy trình bài viết";
+            sm.TargetObjectType = typeof(BaiViet);
+            sm.StatePropertyName = new StringObject(nameof(BaiViet.TrangThai));
+
+            // Trạng thái
+            var draft = objectSpace.CreateObject<StateMachineState>();
+            draft.Caption = WorkflowState.Draft.ToString();
+            draft.StateMachine = sm;
+
+            var pending = objectSpace.CreateObject<StateMachineState>();
+            pending.Caption = WorkflowState.Pending.ToString();
+            pending.StateMachine = sm;
+
+            var approved = objectSpace.CreateObject<StateMachineState>();
+            approved.Caption = WorkflowState.Approved.ToString();
+            approved.StateMachine = sm;
+
+            var rejected = objectSpace.CreateObject<StateMachineState>();
+            rejected.Caption = WorkflowState.Rejected.ToString();
+            rejected.StateMachine = sm;
+
+            var published = objectSpace.CreateObject<StateMachineState>();
+            published.Caption = WorkflowState.Published.ToString();
+            published.StateMachine = sm;
+
+            sm.StartState = draft;
+
+            // Transition
+            CreateTransition(objectSpace, draft, pending, "Gửi duyệt");
+            CreateTransition(objectSpace, pending, approved, "Duyệt bài");
+            CreateTransition(objectSpace, pending, rejected, "Từ chối");
+            CreateTransition(objectSpace, approved, published, "Xuất bản");
+
+            objectSpace.CommitChanges();
+        }
+        
     }
 }

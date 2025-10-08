@@ -28,6 +28,7 @@ public sealed class DXApplication3BlazorModule : ModuleBase {
     public DXApplication3BlazorModule() {
         //Load StateMachineModule
         RequiredModuleTypes.Add(typeof(DevExpress.ExpressApp.StateMachine.StateMachineModule));
+       
     }
     public override IEnumerable<ModuleUpdater> GetModuleUpdaters(IObjectSpace objectSpace, Version versionFromDB) {
         return ModuleUpdater.EmptyModuleUpdaters;

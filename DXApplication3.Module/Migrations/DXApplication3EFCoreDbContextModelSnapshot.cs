@@ -488,7 +488,7 @@ namespace DXApplication3.Module.Migrations
 
             modelBuilder.Entity("DXApplication3.Module.BusinessObjects.BaiViet", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
@@ -502,13 +502,14 @@ namespace DXApplication3.Module.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("TieuDe")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
 
                     b.Property<int>("TrangThai")
                         .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                    b.HasKey("ID");
 
                     b.HasIndex("NguoiTaoID");
 

@@ -8,6 +8,9 @@ using DevExpress.ExpressApp.EF;
 using DevExpress.Persistent.BaseImpl.EF;
 using DevExpress.Persistent.BaseImpl.EF.PermissionPolicy;
 using DXApplication3.Module.BusinessObjects;
+using DevExpress.ExpressApp.Utils;
+using DevExpress.Persistent.BaseImpl.EF.StateMachine;
+using DXApplication3.Module.Workflows;
 
 namespace DXApplication3.Module.DatabaseUpdate;
 
@@ -18,6 +21,9 @@ public class Updater : ModuleUpdater {
     }
     public override void UpdateDatabaseAfterUpdateSchema() {
         base.UpdateDatabaseAfterUpdateSchema();
+
+        //Load workflow 
+        CreateBaiVietStateMachine(ObjectSpace);
         //string name = "MyName";
         //EntityObject1 theObject = ObjectSpace.FirstOrDefault<EntityObject1>(u => u.Name == name);
         //if(theObject == null) {
@@ -30,7 +36,7 @@ public class Updater : ModuleUpdater {
             sampleUser = ObjectSpace.CreateObject<ApplicationUser>();
             sampleUser.UserName = "User";
             // Set a password if the standard authentication type is used
-            sampleUser.SetPassword("");
+            sampleUser.SetPassword("123456");
 
             // The UserLoginInfo object requires a user object Id (Oid).
             // Commit the user object to the database before you create a UserLoginInfo object. This will correctly initialize the user key property.
@@ -45,7 +51,7 @@ public class Updater : ModuleUpdater {
             userAdmin = ObjectSpace.CreateObject<ApplicationUser>();
             userAdmin.UserName = "Admin";
             // Set a password if the standard authentication type is used
-            userAdmin.SetPassword("");
+            userAdmin.SetPassword("123456");
 
             // The UserLoginInfo object requires a user object Id (Oid).
             // Commit the user object to the database before you create a UserLoginInfo object. This will correctly initialize the user key property.
@@ -63,6 +69,15 @@ public class Updater : ModuleUpdater {
         ObjectSpace.CommitChanges(); //This line persists created object(s).
 #endif
     }
+
+    private void CreateBaiVietStateMachine(IObjectSpace objectSpace)
+    {
+
+        DuyetBaiStateMachineHelper.Create(objectSpace);
+      
+    }
+
+   
     public override void UpdateDatabaseBeforeUpdateSchema() {
         base.UpdateDatabaseBeforeUpdateSchema();
     }

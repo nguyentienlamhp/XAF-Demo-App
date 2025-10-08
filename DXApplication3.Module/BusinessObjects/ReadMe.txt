@@ -163,7 +163,7 @@ Bạn có muốn mình chụp **ảnh màn hình hoặc mockup** cho từng bư�
 
 
 
-add-migration FixDB-44 -StartupProject "DXApplication3.Module" -Project "DXApplication3.Module"
+add-migration Intial -StartupProject "DXApplication3.Module" -Project "DXApplication3.Module"
 
 update-database -StartupProject "DXApplication3.Module" -Project "DXApplication3.Module"
 

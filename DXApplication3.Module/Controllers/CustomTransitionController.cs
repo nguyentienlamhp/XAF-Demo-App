@@ -19,7 +19,9 @@ namespace DXApplication3.Module.Controllers
             TargetObjectType = typeof(BaiViet);
             var simpleAction = new SimpleAction(this, "ApproveArticle2", PredefinedCategory.Edit)
             {
-                Caption = "Duyệt bài viết"
+                Caption = "Duyệt bài viết",
+                ConfirmationMessage = "Bạn có đồng ý không",
+                SelectionDependencyType = SelectionDependencyType.RequireSingleObject
             };
             simpleAction.Execute += SimpleAction_Execute;
 

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DXApplication3.Module.Migrations
 {
-    public partial class FixDB44 : Migration
+    public partial class Intial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -233,16 +233,16 @@ namespace DXApplication3.Module.Migrations
                 name: "BaiViets",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    TieuDe = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
+                    ID = table.Column<Guid>(type: "uuid", nullable: false),
+                    TieuDe = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     NoiDung = table.Column<string>(type: "text", nullable: true),
-                    TrangThai = table.Column<int>(type: "integer", nullable: false),
+                    NgayTao = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     NguoiTaoID = table.Column<Guid>(type: "uuid", nullable: true),
-                    NgayTao = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
+                    TrangThai = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BaiViets", x => x.Id);
+                    table.PrimaryKey("PK_BaiViets", x => x.ID);
                     table.ForeignKey(
                         name: "FK_BaiViets_PermissionPolicyUser_NguoiTaoID",
                         column: x => x.NguoiTaoID,
