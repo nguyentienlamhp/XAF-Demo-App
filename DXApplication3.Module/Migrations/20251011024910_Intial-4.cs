@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DXApplication3.Module.Migrations
 {
-    public partial class Intial : Migration
+    public partial class Intial4 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -119,7 +119,7 @@ namespace DXApplication3.Module.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "StateMachines",
+                name: "StateMachine",
                 columns: table => new
                 {
                     ID = table.Column<Guid>(type: "uuid", nullable: false),
@@ -131,7 +131,7 @@ namespace DXApplication3.Module.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_StateMachines", x => x.ID);
+                    table.PrimaryKey("PK_StateMachine", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -251,6 +251,70 @@ namespace DXApplication3.Module.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DanhMucDichVu",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "uuid", nullable: false),
+                    MaDichVu = table.Column<string>(type: "text", nullable: true),
+                    TenDichVu = table.Column<string>(type: "text", nullable: true),
+                    NgayTao = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    NguoiTaoID = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DanhMucDichVu", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_DanhMucDichVu_PermissionPolicyUser_NguoiTaoID",
+                        column: x => x.NguoiTaoID,
+                        principalTable: "PermissionPolicyUser",
+                        principalColumn: "ID");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DanhMucKhoanChi",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "uuid", nullable: false),
+                    MaKhoanChi = table.Column<string>(type: "text", nullable: true),
+                    TenKhoanChi = table.Column<string>(type: "text", nullable: true),
+                    SoTien = table.Column<decimal>(type: "numeric", nullable: false),
+                    NhomID = table.Column<Guid>(type: "uuid", nullable: false),
+                    isChiHo = table.Column<bool>(type: "boolean", nullable: false),
+                    NguoiTaoID = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DanhMucKhoanChi", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_DanhMucKhoanChi_PermissionPolicyUser_NguoiTaoID",
+                        column: x => x.NguoiTaoID,
+                        principalTable: "PermissionPolicyUser",
+                        principalColumn: "ID");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DanhMucKhoanThu",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "uuid", nullable: false),
+                    MaKhoanThu = table.Column<string>(type: "text", nullable: true),
+                    TenKhoanThu = table.Column<string>(type: "text", nullable: true),
+                    SoTien = table.Column<decimal>(type: "numeric", nullable: false),
+                    NhomID = table.Column<Guid>(type: "uuid", nullable: false),
+                    isBackCom = table.Column<bool>(type: "boolean", nullable: false),
+                    NguoiTaoID = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DanhMucKhoanThu", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_DanhMucKhoanThu_PermissionPolicyUser_NguoiTaoID",
+                        column: x => x.NguoiTaoID,
+                        principalTable: "PermissionPolicyUser",
+                        principalColumn: "ID");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PermissionPolicyRolePermissionPolicyUser",
                 columns: table => new
                 {
@@ -295,7 +359,7 @@ namespace DXApplication3.Module.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "StateMachineStates",
+                name: "StateMachineState",
                 columns: table => new
                 {
                     ID = table.Column<Guid>(type: "uuid", nullable: false),
@@ -306,11 +370,11 @@ namespace DXApplication3.Module.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_StateMachineStates", x => x.ID);
+                    table.PrimaryKey("PK_StateMachineState", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_StateMachineStates_StateMachines_StateMachineID",
+                        name: "FK_StateMachineState_StateMachine_StateMachineID",
                         column: x => x.StateMachineID,
-                        principalTable: "StateMachines",
+                        principalTable: "StateMachine",
                         principalColumn: "ID");
                 });
 
@@ -377,6 +441,27 @@ namespace DXApplication3.Module.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DonHang",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "uuid", nullable: false),
+                    MaDonHang = table.Column<string>(type: "text", nullable: true),
+                    LoaiDichVuID = table.Column<Guid>(type: "uuid", nullable: false),
+                    TenDonHang = table.Column<string>(type: "text", nullable: true),
+                    NgayTao = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DonHang", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_DonHang_DanhMucDichVu_LoaiDichVuID",
+                        column: x => x.LoaiDichVuID,
+                        principalTable: "DanhMucDichVu",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "StateMachineAppearance",
                 columns: table => new
                 {
@@ -398,14 +483,14 @@ namespace DXApplication3.Module.Migrations
                 {
                     table.PrimaryKey("PK_StateMachineAppearance", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_StateMachineAppearance_StateMachineStates_StateID",
+                        name: "FK_StateMachineAppearance_StateMachineState_StateID",
                         column: x => x.StateID,
-                        principalTable: "StateMachineStates",
+                        principalTable: "StateMachineState",
                         principalColumn: "ID");
                 });
 
             migrationBuilder.CreateTable(
-                name: "StateMachineTransitions",
+                name: "StateMachineTransition",
                 columns: table => new
                 {
                     ID = table.Column<Guid>(type: "uuid", nullable: false),
@@ -417,16 +502,41 @@ namespace DXApplication3.Module.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_StateMachineTransitions", x => x.ID);
+                    table.PrimaryKey("PK_StateMachineTransition", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_StateMachineTransitions_StateMachineStates_SourceStateID",
+                        name: "FK_StateMachineTransition_StateMachineState_SourceStateID",
                         column: x => x.SourceStateID,
-                        principalTable: "StateMachineStates",
+                        principalTable: "StateMachineState",
                         principalColumn: "ID");
                     table.ForeignKey(
-                        name: "FK_StateMachineTransitions_StateMachineStates_TargetStateID",
+                        name: "FK_StateMachineTransition_StateMachineState_TargetStateID",
                         column: x => x.TargetStateID,
-                        principalTable: "StateMachineStates",
+                        principalTable: "StateMachineState",
+                        principalColumn: "ID");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DonHangDoanhThu",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(type: "uuid", nullable: false),
+                    TenKhoanThu = table.Column<string>(type: "text", nullable: true),
+                    SoTien = table.Column<decimal>(type: "numeric", nullable: false),
+                    KhoanThusID = table.Column<Guid>(type: "uuid", nullable: true),
+                    DonHangID = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DonHangDoanhThu", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_DonHangDoanhThu_DanhMucKhoanThu_KhoanThusID",
+                        column: x => x.KhoanThusID,
+                        principalTable: "DanhMucKhoanThu",
+                        principalColumn: "ID");
+                    table.ForeignKey(
+                        name: "FK_DonHangDoanhThu_DonHang_DonHangID",
+                        column: x => x.DonHangID,
+                        principalTable: "DonHang",
                         principalColumn: "ID");
                 });
 
@@ -434,6 +544,36 @@ namespace DXApplication3.Module.Migrations
                 name: "IX_BaiViets_NguoiTaoID",
                 table: "BaiViets",
                 column: "NguoiTaoID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DanhMucDichVu_NguoiTaoID",
+                table: "DanhMucDichVu",
+                column: "NguoiTaoID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DanhMucKhoanChi_NguoiTaoID",
+                table: "DanhMucKhoanChi",
+                column: "NguoiTaoID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DanhMucKhoanThu_NguoiTaoID",
+                table: "DanhMucKhoanThu",
+                column: "NguoiTaoID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DonHang_LoaiDichVuID",
+                table: "DonHang",
+                column: "LoaiDichVuID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DonHangDoanhThu_DonHangID",
+                table: "DonHangDoanhThu",
+                column: "DonHangID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DonHangDoanhThu_KhoanThusID",
+                table: "DonHangDoanhThu",
+                column: "KhoanThusID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Employee_TaskID",
@@ -492,18 +632,18 @@ namespace DXApplication3.Module.Migrations
                 column: "StateID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StateMachineStates_StateMachineID",
-                table: "StateMachineStates",
+                name: "IX_StateMachineState_StateMachineID",
+                table: "StateMachineState",
                 column: "StateMachineID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StateMachineTransitions_SourceStateID",
-                table: "StateMachineTransitions",
+                name: "IX_StateMachineTransition_SourceStateID",
+                table: "StateMachineTransition",
                 column: "SourceStateID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StateMachineTransitions_TargetStateID",
-                table: "StateMachineTransitions",
+                name: "IX_StateMachineTransition_TargetStateID",
+                table: "StateMachineTransition",
                 column: "TargetStateID");
         }
 
@@ -513,7 +653,13 @@ namespace DXApplication3.Module.Migrations
                 name: "BaiViets");
 
             migrationBuilder.DropTable(
+                name: "DanhMucKhoanChi");
+
+            migrationBuilder.DropTable(
                 name: "DashboardData");
+
+            migrationBuilder.DropTable(
+                name: "DonHangDoanhThu");
 
             migrationBuilder.DropTable(
                 name: "Employee");
@@ -552,7 +698,13 @@ namespace DXApplication3.Module.Migrations
                 name: "StateMachineAppearance");
 
             migrationBuilder.DropTable(
-                name: "StateMachineTransitions");
+                name: "StateMachineTransition");
+
+            migrationBuilder.DropTable(
+                name: "DanhMucKhoanThu");
+
+            migrationBuilder.DropTable(
+                name: "DonHang");
 
             migrationBuilder.DropTable(
                 name: "Task");
@@ -564,16 +716,19 @@ namespace DXApplication3.Module.Migrations
                 name: "PermissionPolicyTypePermissionObject");
 
             migrationBuilder.DropTable(
-                name: "PermissionPolicyUser");
+                name: "StateMachineState");
 
             migrationBuilder.DropTable(
-                name: "StateMachineStates");
+                name: "DanhMucDichVu");
 
             migrationBuilder.DropTable(
                 name: "PermissionPolicyRoleBase");
 
             migrationBuilder.DropTable(
-                name: "StateMachines");
+                name: "StateMachine");
+
+            migrationBuilder.DropTable(
+                name: "PermissionPolicyUser");
         }
     }
 }

@@ -23,13 +23,15 @@ public class Updater : ModuleUpdater {
         base.UpdateDatabaseAfterUpdateSchema();
 
         //Load workflow 
-        CreateBaiVietStateMachine(ObjectSpace);
+        // CreateBaiVietStateMachine(ObjectSpace);
         //string name = "MyName";
         //EntityObject1 theObject = ObjectSpace.FirstOrDefault<EntityObject1>(u => u.Name == name);
         //if(theObject == null) {
         //    theObject = ObjectSpace.CreateObject<EntityObject1>();
         //    theObject.Name = name;
         //}
+        //Gọi hàm khởi tạo các danh mục cố định
+        DatabaseDanhMucs.Init(ObjectSpace);
 #if !RELEASE
         ApplicationUser sampleUser = ObjectSpace.FirstOrDefault<ApplicationUser>(u => u.UserName == "User");
         if(sampleUser == null) {

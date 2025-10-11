@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DXApplication3.Module.Migrations
 {
     [DbContext(typeof(DXApplication3EFCoreDbContext))]
-    [Migration("20250930064205_Intial")]
-    partial class Intial
+    [Migration("20251011024910_Intial-4")]
+    partial class Intial4
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -356,7 +356,7 @@ namespace DXApplication3.Module.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("StateMachines");
+                    b.ToTable("StateMachine");
                 });
 
             modelBuilder.Entity("DevExpress.Persistent.BaseImpl.EF.StateMachine.StateMachineAppearance", b =>
@@ -430,7 +430,7 @@ namespace DXApplication3.Module.Migrations
 
                     b.HasIndex("StateMachineID");
 
-                    b.ToTable("StateMachineStates");
+                    b.ToTable("StateMachineState");
                 });
 
             modelBuilder.Entity("DevExpress.Persistent.BaseImpl.EF.StateMachine.StateMachineTransition", b =>
@@ -460,7 +460,7 @@ namespace DXApplication3.Module.Migrations
 
                     b.HasIndex("TargetStateID");
 
-                    b.ToTable("StateMachineTransitions");
+                    b.ToTable("StateMachineTransition");
                 });
 
             modelBuilder.Entity("DXApplication3.Module.BusinessObjects.ApplicationUserLoginInfo", b =>
@@ -516,6 +516,145 @@ namespace DXApplication3.Module.Migrations
                     b.HasIndex("NguoiTaoID");
 
                     b.ToTable("BaiViets");
+                });
+
+            modelBuilder.Entity("DXApplication3.Module.BusinessObjects.DanhMuc.DanhMucDichVu", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("MaDichVu")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("NgayTao")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid?>("NguoiTaoID")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("TenDichVu")
+                        .HasColumnType("text");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("NguoiTaoID");
+
+                    b.ToTable("DanhMucDichVu");
+                });
+
+            modelBuilder.Entity("DXApplication3.Module.BusinessObjects.DanhMuc.DanhMucKhoanChi", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("MaKhoanChi")
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("NguoiTaoID")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("NhomID")
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("SoTien")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("TenKhoanChi")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("isChiHo")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("NguoiTaoID");
+
+                    b.ToTable("DanhMucKhoanChi");
+                });
+
+            modelBuilder.Entity("DXApplication3.Module.BusinessObjects.DanhMuc.DanhMucKhoanThu", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("MaKhoanThu")
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("NguoiTaoID")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("NhomID")
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("SoTien")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("TenKhoanThu")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("isBackCom")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("NguoiTaoID");
+
+                    b.ToTable("DanhMucKhoanThu");
+                });
+
+            modelBuilder.Entity("DXApplication3.Module.BusinessObjects.DonHangs.DonHang", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("LoaiDichVuID")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("MaDonHang")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("NgayTao")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("TenDonHang")
+                        .HasColumnType("text");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("LoaiDichVuID");
+
+                    b.ToTable("DonHang");
+                });
+
+            modelBuilder.Entity("DXApplication3.Module.BusinessObjects.DonHangs.DonHangDoanhThu", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("DonHangID")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("KhoanThusID")
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("SoTien")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("TenKhoanThu")
+                        .HasColumnType("text");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("DonHangID");
+
+                    b.HasIndex("KhoanThusID");
+
+                    b.ToTable("DonHangDoanhThu");
                 });
 
             modelBuilder.Entity("DXApplication3.Module.BusinessObjects.Employee", b =>
@@ -733,6 +872,59 @@ namespace DXApplication3.Module.Migrations
                     b.Navigation("NguoiTao");
                 });
 
+            modelBuilder.Entity("DXApplication3.Module.BusinessObjects.DanhMuc.DanhMucDichVu", b =>
+                {
+                    b.HasOne("DXApplication3.Module.BusinessObjects.ApplicationUser", "NguoiTao")
+                        .WithMany()
+                        .HasForeignKey("NguoiTaoID");
+
+                    b.Navigation("NguoiTao");
+                });
+
+            modelBuilder.Entity("DXApplication3.Module.BusinessObjects.DanhMuc.DanhMucKhoanChi", b =>
+                {
+                    b.HasOne("DXApplication3.Module.BusinessObjects.ApplicationUser", "NguoiTao")
+                        .WithMany()
+                        .HasForeignKey("NguoiTaoID");
+
+                    b.Navigation("NguoiTao");
+                });
+
+            modelBuilder.Entity("DXApplication3.Module.BusinessObjects.DanhMuc.DanhMucKhoanThu", b =>
+                {
+                    b.HasOne("DXApplication3.Module.BusinessObjects.ApplicationUser", "NguoiTao")
+                        .WithMany()
+                        .HasForeignKey("NguoiTaoID");
+
+                    b.Navigation("NguoiTao");
+                });
+
+            modelBuilder.Entity("DXApplication3.Module.BusinessObjects.DonHangs.DonHang", b =>
+                {
+                    b.HasOne("DXApplication3.Module.BusinessObjects.DanhMuc.DanhMucDichVu", "LoaiDichVu")
+                        .WithMany()
+                        .HasForeignKey("LoaiDichVuID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("LoaiDichVu");
+                });
+
+            modelBuilder.Entity("DXApplication3.Module.BusinessObjects.DonHangs.DonHangDoanhThu", b =>
+                {
+                    b.HasOne("DXApplication3.Module.BusinessObjects.DonHangs.DonHang", "DonHang")
+                        .WithMany("DonHangDoanhThus")
+                        .HasForeignKey("DonHangID");
+
+                    b.HasOne("DXApplication3.Module.BusinessObjects.DanhMuc.DanhMucKhoanThu", "KhoanThus")
+                        .WithMany()
+                        .HasForeignKey("KhoanThusID");
+
+                    b.Navigation("DonHang");
+
+                    b.Navigation("KhoanThus");
+                });
+
             modelBuilder.Entity("DXApplication3.Module.BusinessObjects.Employee", b =>
                 {
                     b.HasOne("DXApplication3.Module.BusinessObjects.Task", null)
@@ -786,6 +978,11 @@ namespace DXApplication3.Module.Migrations
                     b.Navigation("Appearances");
 
                     b.Navigation("Transitions");
+                });
+
+            modelBuilder.Entity("DXApplication3.Module.BusinessObjects.DonHangs.DonHang", b =>
+                {
+                    b.Navigation("DonHangDoanhThus");
                 });
 
             modelBuilder.Entity("DXApplication3.Module.BusinessObjects.Task", b =>

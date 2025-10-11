@@ -26,7 +26,7 @@ public sealed class DXApplication3WinModule : ModuleBase {
     public DXApplication3WinModule() {
         DevExpress.ExpressApp.Editors.FormattingProvider.UseMaskSettings = true;
         //Load StateMachineModule
-        RequiredModuleTypes.Add(typeof(DevExpress.ExpressApp.StateMachine.StateMachineModule));
+       // RequiredModuleTypes.Add(typeof(DevExpress.ExpressApp.StateMachine.StateMachineModule));
         
     }
     public override IEnumerable<ModuleUpdater> GetModuleUpdaters(IObjectSpace objectSpace, Version versionFromDB) {

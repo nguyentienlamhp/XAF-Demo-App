@@ -65,9 +65,9 @@ public class Startup {
                     options.AllowValidationDetailsAccess = false;
                 })
                 .Add<DXApplication3.Module.DXApplication3Module>()
-                .Add<DXApplication3BlazorModule>()
+                .Add<DXApplication3BlazorModule>();
                 //them StateMachineModule
-                .Add<DevExpress.ExpressApp.StateMachine.StateMachineModule>();
+                //.Add<DevExpress.ExpressApp.StateMachine.StateMachineModule>();
             
 
 

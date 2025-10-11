@@ -41,7 +41,7 @@ public sealed class DXApplication3Module : ModuleBase {
         //Nếu là non-persistent object bạn cần đăng ký trong Module.cs:
         AdditionalExportedTypes.Add(typeof(CustomPageViewModel));
         //kich hoat StateMachine 
-        RequiredModuleTypes.Add(typeof(DevExpress.ExpressApp.StateMachine.StateMachineModule));
+        //RequiredModuleTypes.Add(typeof(DevExpress.ExpressApp.StateMachine.StateMachineModule));
 
 
     }

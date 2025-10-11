@@ -7,6 +7,8 @@ using DevExpress.ExpressApp.Design;
 using DevExpress.ExpressApp.EFCore.DesignTime;
 using Castle.Core.Resource;
 using DevExpress.Persistent.BaseImpl.EF.StateMachine;
+using DXApplication3.Module.BusinessObjects.DanhMuc;
+using DXApplication3.Module.BusinessObjects.DonHangs;
 
 namespace DXApplication3.Module.BusinessObjects;
 
@@ -90,10 +92,20 @@ public class DXApplication3EFCoreDbContext : DbContext {
 
     public DbSet<Task> Task { get; set; }
 
+    public DbSet<DonHang> DonHang { get; set; }
+    public DbSet<DanhMucKhoanThu> DanhMucKhoanThu { get; set; }
+
+    public DbSet<DanhMucKhoanChi> DanhMucKhoanChi { get; set; }
+
+    public DbSet<DonHangDoanhThu> DonHangDoanhThu { get; set; }
+
+    //public DbSet<ChiPhiDonHang> ChiPhiDonHang { get; set; }
+
+
     //Dang ký StateMachine
-    public DbSet<StateMachine> StateMachines { get; set; }
-    public DbSet<StateMachineState> StateMachineStates { get; set; }
-    public DbSet<StateMachineTransition> StateMachineTransitions { get; set; }
+    //public DbSet<StateMachine> StateMachines { get; set; }
+    //public DbSet<StateMachineState> StateMachineStates { get; set; }
+    //public DbSet<StateMachineTransition> StateMachineTransitions { get; set; }
 
 
 
