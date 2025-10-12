@@ -19,7 +19,7 @@ namespace DXApplication3.Win;
 public class DXApplication3WindowsFormsApplication : WinApplication {
     public DXApplication3WindowsFormsApplication() {
 		SplashScreen = new DXSplashScreen(typeof(XafSplashScreen), new DefaultOverlayFormOptions());
-        ApplicationName = "DXApplication3";
+        ApplicationName = "QLVANTAI";
         CheckCompatibilityType = DevExpress.ExpressApp.CheckCompatibilityType.DatabaseSchema;
         UseOldTemplates = false;
         DatabaseVersionMismatch += DXApplication3WindowsFormsApplication_DatabaseVersionMismatch;

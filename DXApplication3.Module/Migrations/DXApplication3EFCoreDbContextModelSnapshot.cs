@@ -331,136 +331,6 @@ namespace DXApplication3.Module.Migrations
                     b.ToTable("ReportDataV2");
                 });
 
-            modelBuilder.Entity("DevExpress.Persistent.BaseImpl.EF.StateMachine.StateMachine", b =>
-                {
-                    b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("ExpandActionsInDetailView")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<string>("StatePropertyNameBase")
-                        .HasColumnType("text");
-
-                    b.Property<string>("TargetObjectTypeName")
-                        .HasColumnType("text");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("StateMachine");
-                });
-
-            modelBuilder.Entity("DevExpress.Persistent.BaseImpl.EF.StateMachine.StateMachineAppearance", b =>
-                {
-                    b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("AppearanceItemType")
-                        .HasColumnType("text");
-
-                    b.Property<int>("BackColorInt")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Context")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Criteria")
-                        .HasColumnType("text");
-
-                    b.Property<bool?>("Enabled")
-                        .HasColumnType("boolean");
-
-                    b.Property<int>("FontColorInt")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("FontStyle")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Method")
-                        .HasColumnType("text");
-
-                    b.Property<int>("Priority")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid?>("StateID")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("TargetItems")
-                        .HasColumnType("text");
-
-                    b.Property<int?>("Visibility")
-                        .HasColumnType("integer");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("StateID");
-
-                    b.ToTable("StateMachineAppearance");
-                });
-
-            modelBuilder.Entity("DevExpress.Persistent.BaseImpl.EF.StateMachine.StateMachineState", b =>
-                {
-                    b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Caption")
-                        .HasColumnType("text");
-
-                    b.Property<string>("MarkerValue")
-                        .HasColumnType("text");
-
-                    b.Property<Guid?>("StateMachineID")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("TargetObjectCriteria")
-                        .HasColumnType("text");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("StateMachineID");
-
-                    b.ToTable("StateMachineState");
-                });
-
-            modelBuilder.Entity("DevExpress.Persistent.BaseImpl.EF.StateMachine.StateMachineTransition", b =>
-                {
-                    b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Caption")
-                        .HasColumnType("text");
-
-                    b.Property<int>("Index")
-                        .HasColumnType("integer");
-
-                    b.Property<bool>("SaveAndCloseView")
-                        .HasColumnType("boolean");
-
-                    b.Property<Guid?>("SourceStateID")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("TargetStateID")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("SourceStateID");
-
-                    b.HasIndex("TargetStateID");
-
-                    b.ToTable("StateMachineTransition");
-                });
-
             modelBuilder.Entity("DXApplication3.Module.BusinessObjects.ApplicationUserLoginInfo", b =>
                 {
                     b.Property<Guid>("ID")
@@ -628,16 +498,43 @@ namespace DXApplication3.Module.Migrations
                     b.ToTable("DonHang");
                 });
 
+            modelBuilder.Entity("DXApplication3.Module.BusinessObjects.DonHangs.DonHangChiPhi", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("DonHangID")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("LoaiKhoanChiID")
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("SoTien")
+                        .HasColumnType("numeric");
+
+                    b.Property<string>("TenKhoanChi")
+                        .HasColumnType("text");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("DonHangID");
+
+                    b.HasIndex("LoaiKhoanChiID");
+
+                    b.ToTable("DonHangChiPhi");
+                });
+
             modelBuilder.Entity("DXApplication3.Module.BusinessObjects.DonHangs.DonHangDoanhThu", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("DonHangID")
+                    b.Property<Guid>("DonHangID")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("KhoanThusID")
+                    b.Property<Guid>("LoaiKhoanThuID")
                         .HasColumnType("uuid");
 
                     b.Property<decimal>("SoTien")
@@ -650,7 +547,7 @@ namespace DXApplication3.Module.Migrations
 
                     b.HasIndex("DonHangID");
 
-                    b.HasIndex("KhoanThusID");
+                    b.HasIndex("LoaiKhoanThuID");
 
                     b.ToTable("DonHangDoanhThu");
                 });
@@ -817,39 +714,6 @@ namespace DXApplication3.Module.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("DevExpress.Persistent.BaseImpl.EF.StateMachine.StateMachineAppearance", b =>
-                {
-                    b.HasOne("DevExpress.Persistent.BaseImpl.EF.StateMachine.StateMachineState", "State")
-                        .WithMany("Appearances")
-                        .HasForeignKey("StateID");
-
-                    b.Navigation("State");
-                });
-
-            modelBuilder.Entity("DevExpress.Persistent.BaseImpl.EF.StateMachine.StateMachineState", b =>
-                {
-                    b.HasOne("DevExpress.Persistent.BaseImpl.EF.StateMachine.StateMachine", "StateMachine")
-                        .WithMany("States")
-                        .HasForeignKey("StateMachineID");
-
-                    b.Navigation("StateMachine");
-                });
-
-            modelBuilder.Entity("DevExpress.Persistent.BaseImpl.EF.StateMachine.StateMachineTransition", b =>
-                {
-                    b.HasOne("DevExpress.Persistent.BaseImpl.EF.StateMachine.StateMachineState", "SourceState")
-                        .WithMany("Transitions")
-                        .HasForeignKey("SourceStateID");
-
-                    b.HasOne("DevExpress.Persistent.BaseImpl.EF.StateMachine.StateMachineState", "TargetState")
-                        .WithMany()
-                        .HasForeignKey("TargetStateID");
-
-                    b.Navigation("SourceState");
-
-                    b.Navigation("TargetState");
-                });
-
             modelBuilder.Entity("DXApplication3.Module.BusinessObjects.ApplicationUserLoginInfo", b =>
                 {
                     b.HasOne("DXApplication3.Module.BusinessObjects.ApplicationUser", "User")
@@ -908,15 +772,38 @@ namespace DXApplication3.Module.Migrations
                     b.Navigation("LoaiDichVu");
                 });
 
+            modelBuilder.Entity("DXApplication3.Module.BusinessObjects.DonHangs.DonHangChiPhi", b =>
+                {
+                    b.HasOne("DXApplication3.Module.BusinessObjects.DonHangs.DonHang", "DonHang")
+                        .WithMany("DonHangChiPhis")
+                        .HasForeignKey("DonHangID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DXApplication3.Module.BusinessObjects.DanhMuc.DanhMucKhoanChi", "KhoanChis")
+                        .WithMany()
+                        .HasForeignKey("LoaiKhoanChiID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DonHang");
+
+                    b.Navigation("KhoanChis");
+                });
+
             modelBuilder.Entity("DXApplication3.Module.BusinessObjects.DonHangs.DonHangDoanhThu", b =>
                 {
                     b.HasOne("DXApplication3.Module.BusinessObjects.DonHangs.DonHang", "DonHang")
                         .WithMany("DonHangDoanhThus")
-                        .HasForeignKey("DonHangID");
+                        .HasForeignKey("DonHangID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("DXApplication3.Module.BusinessObjects.DanhMuc.DanhMucKhoanThu", "KhoanThus")
                         .WithMany()
-                        .HasForeignKey("KhoanThusID");
+                        .HasForeignKey("LoaiKhoanThuID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("DonHang");
 
@@ -966,20 +853,10 @@ namespace DXApplication3.Module.Migrations
                     b.Navigation("ObjectPermissions");
                 });
 
-            modelBuilder.Entity("DevExpress.Persistent.BaseImpl.EF.StateMachine.StateMachine", b =>
-                {
-                    b.Navigation("States");
-                });
-
-            modelBuilder.Entity("DevExpress.Persistent.BaseImpl.EF.StateMachine.StateMachineState", b =>
-                {
-                    b.Navigation("Appearances");
-
-                    b.Navigation("Transitions");
-                });
-
             modelBuilder.Entity("DXApplication3.Module.BusinessObjects.DonHangs.DonHang", b =>
                 {
+                    b.Navigation("DonHangChiPhis");
+
                     b.Navigation("DonHangDoanhThus");
                 });
 

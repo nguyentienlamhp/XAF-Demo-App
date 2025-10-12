@@ -13,7 +13,7 @@ namespace DXApplication3.Blazor.Server;
 
 public class DXApplication3BlazorApplication : BlazorApplication {
     public DXApplication3BlazorApplication() {
-        ApplicationName = "Ứng dụng demo";
+        ApplicationName = "Quản lý vận tải";
         CheckCompatibilityType = DevExpress.ExpressApp.CheckCompatibilityType.DatabaseSchema;
         DatabaseVersionMismatch += DXApplication3BlazorApplication_DatabaseVersionMismatch;
     }
@@ -25,6 +25,17 @@ public class DXApplication3BlazorApplication : BlazorApplication {
         }
 #endif
     }
+
+    // ✅ THÊM PHƯƠNG THỨC NÀY
+    protected override void CreateDefaultObjectSpaceProvider(CreateCustomObjectSpaceProviderEventArgs args)
+    {
+        // Cho phép Blazor mở View của NonPersistent object như ThongKeKinhDoanh
+        args.ObjectSpaceProviders.Add(new NonPersistentObjectSpaceProvider(TypesInfo, null));
+
+        // Giữ nguyên EFCore provider mặc định
+        base.CreateDefaultObjectSpaceProvider(args);
+    }
+
     private void DXApplication3BlazorApplication_DatabaseVersionMismatch(object sender, DatabaseVersionMismatchEventArgs e) {
 #if EASYTEST
         e.Updater.Update();

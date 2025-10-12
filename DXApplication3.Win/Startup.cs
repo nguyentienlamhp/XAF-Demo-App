@@ -37,9 +37,9 @@ public class ApplicationBuilder : IDesignTimeApplicationFactory {
                 options.AllowValidationDetailsAccess = false;
             })
             .Add<DXApplication3.Module.DXApplication3Module>()
-            .Add<DXApplication3WinModule>()
+            .Add<DXApplication3WinModule>();
              //StateMachineModule
-             .Add<DevExpress.ExpressApp.StateMachine.StateMachineModule>();
+            // .Add<DevExpress.ExpressApp.StateMachine.StateMachineModule>();
         
         builder.ObjectSpaceProviders
             .AddSecuredEFCore().WithDbContext<DXApplication3.Module.BusinessObjects.DXApplication3EFCoreDbContext>((application, options) => {

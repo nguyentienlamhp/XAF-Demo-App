@@ -14,9 +14,10 @@ namespace DXApplication3.Module.BusinessObjects.DanhMuc
 {
     [NavigationItem("Danh mục")]
     [XafDisplayName("DM Khoản chi")]
+    [DefaultProperty(nameof(TenKhoanChi))] // 👈 Trường mặc định đại diện cho class
     public class DanhMucKhoanChi
     {
-        [Key]
+        [System.ComponentModel.DataAnnotations.Key]
         public virtual Guid ID { get; set; }
 
         [RuleUniqueValue(

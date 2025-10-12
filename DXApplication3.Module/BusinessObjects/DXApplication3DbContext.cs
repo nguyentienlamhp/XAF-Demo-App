@@ -132,8 +132,15 @@ public class DXApplication3EFCoreDbContext : DbContext {
 
         // Đăng ký thêm các entity StateMachine
         // Chỉ ignore property có thật
-        modelBuilder.Entity<StateMachine>()
-            .Ignore(sm => sm.StartState);
+        //modelBuilder.Entity<StateMachine>()
+        //    .Ignore(sm => sm.StartState);
+
+        ////Xoa danh muc cha la xoa het cac con co link den
+        //modelBuilder.Entity<DonHangDoanhThu>()
+        //.HasOne(c => c.KhoanThus)
+        //.WithMany(d => d.ID)
+        //.HasForeignKey(c => c.LoaiKhoanThuID)
+        //.OnDelete(DeleteBehavior.Cascade);
 
 
         //modelBuilder.Entity<StateMachine>();

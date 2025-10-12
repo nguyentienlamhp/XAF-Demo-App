@@ -23,7 +23,7 @@ namespace DXApplication3.Module.BusinessObjects.DonHangs
     [DefaultProperty(nameof(TenDonHang))] // 👈 Trường mặc định đại diện cho class
     public class DonHang : BaseObject, IXafEntityObject
     {
-        public DonHang() { }
+        //public DonHang() { }
 
         [Key]
         public virtual Guid ID { get; set; }
@@ -45,11 +45,20 @@ namespace DXApplication3.Module.BusinessObjects.DonHangs
         //public virtual ICollection<ChiPhiDonHang> ChiPhiDonHangs { get; set; }
 
         // 🔥 Thêm dòng này — tạo liên kết với bảng DoanhThu, trên giao diện doanhthu sẽ hiển thị liên kết với doanhthu-chiphi
+        [XafDisplayName("Bảng doanh thu")]
         public virtual IList<DonHangDoanhThu> DonHangDoanhThus { get; set; } = new ObservableCollection<DonHangDoanhThu>();
 
+ 
         [NotMapped]
         [XafDisplayName("Tổng doanh thu")]
-        public decimal TongDoanhThu => DonHangDoanhThus?.Sum(x => x.SoTien) ?? 0;
+        public decimal TongDoanhThu => DonHangDoanhThus?.Where(x=>x.KhoanThus.isBackCom==false)?.Sum(x => x.SoTien) ?? 0;
+
+        [XafDisplayName("Bảng chi phí")]
+        public virtual IList<DonHangChiPhi> DonHangChiPhis { get; set; } = new ObservableCollection<DonHangChiPhi>();
+
+        [NotMapped]
+        [XafDisplayName("Tổng chi phí")]
+        public decimal TongChiPhi => DonHangChiPhis?.Where(x => x.KhoanChis.isChiHo == false)?.Sum(x => x.SoTien) ?? 0;
 
         public void OnCreated()
         {

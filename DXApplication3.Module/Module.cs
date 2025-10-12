@@ -15,6 +15,8 @@ using DevExpress.ExpressApp.StateMachine;
 using DXApplication3.Module.Workflows;
 using DevExpress.ExpressApp.Security;
 using DevExpress.Persistent.BaseImpl.EF.PermissionPolicy;
+using DXApplication3.Module.NonPersistent;
+using DXApplication3.Module.BusinessObjects.DonHangs;
 
 namespace DXApplication3.Module;
 
@@ -40,9 +42,10 @@ public sealed class DXApplication3Module : ModuleBase {
 		AdditionalExportedTypes.Add(typeof(DevExpress.Persistent.BaseImpl.EF.FileAttachment));
         //Nếu là non-persistent object bạn cần đăng ký trong Module.cs:
         AdditionalExportedTypes.Add(typeof(CustomPageViewModel));
+        //AdditionalExportedTypes.Add(typeof(ThongKeKinhDoanh));
+        AdditionalExportedTypes.Add(typeof(DXApplication3.Module.NonPersistent.ThongKeKinhDoanh));
         //kich hoat StateMachine 
         //RequiredModuleTypes.Add(typeof(DevExpress.ExpressApp.StateMachine.StateMachineModule));
-
 
     }
     public override IEnumerable<ModuleUpdater> GetModuleUpdaters(IObjectSpace objectSpace, Version versionFromDB) {
@@ -52,6 +55,7 @@ public sealed class DXApplication3Module : ModuleBase {
     public override void Setup(XafApplication application) {
         base.Setup(application);
 
+     
         ////Thiet lap quy trinh bai viet
         //// Khi ObjectSpace đã tạo xong mới gọi
         //application.ObjectSpaceCreated += (s, e) => {

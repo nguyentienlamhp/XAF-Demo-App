@@ -11,6 +11,7 @@ using DevExpress.ExpressApp.Model.NodeGenerators;
 using DevExpress.Persistent.BaseImpl.EF;
 using DevExpress.ExpressApp.SystemModule;
 using DevExpress.Mvvm;
+using DXApplication3.Module.NonPersistent;
 
 namespace DXApplication3.Blazor.Server;
 
@@ -28,7 +29,6 @@ public sealed class DXApplication3BlazorModule : ModuleBase {
     public DXApplication3BlazorModule() {
         //Load StateMachineModule
         //RequiredModuleTypes.Add(typeof(DevExpress.ExpressApp.StateMachine.StateMachineModule));
-       
     }
     public override IEnumerable<ModuleUpdater> GetModuleUpdaters(IObjectSpace objectSpace, Version versionFromDB) {
         return ModuleUpdater.EmptyModuleUpdaters;

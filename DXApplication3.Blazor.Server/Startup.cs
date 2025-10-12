@@ -95,6 +95,7 @@ public class Startup {
                     options.UseLazyLoadingProxies();
                 })
                 .AddNonPersistent();
+
             builder.Security
                 .UseIntegratedMode(options => {
                     options.RoleType = typeof(PermissionPolicyRole);

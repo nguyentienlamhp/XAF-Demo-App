@@ -18,27 +18,27 @@ namespace DXApplication3.Module.BusinessObjects.DonHangs
 {
     [DefaultClassOptions]
     [NavigationItem("Đơn hàng")]
-    [XafDisplayName("Đơn hàng - Doanh thu")]
-    public class DonHangDoanhThu: BaseObject, IXafEntityObject
+    [XafDisplayName("Đơn hàng - Chi Phí")]
+    public class DonHangChiPhi: BaseObject, IXafEntityObject
     {
         [System.ComponentModel.DataAnnotations.Key]
         public virtual Guid ID { get; set; }
 
-        [XafDisplayName("Tên khoản thu")]
-        public virtual string TenKhoanThu { get; set; }
+        [XafDisplayName("Tên khoản chi")]
+        public virtual string TenKhoanChi { get; set; }
 
         [XafDisplayName("Số tiền")]
         public virtual decimal SoTien { get; set; }
 
 
         //Muc dich cho loai khoan thu la duy nhat
-        [XafDisplayName("Loại khoản thu")]
+        [XafDisplayName("Loại khoản chi")]
         //[Indexed(Unique = true)]
         [Browsable(false)]
-        public virtual Guid LoaiKhoanThuID { get; set; }
-        [ForeignKey(nameof(LoaiKhoanThuID))]
+        public virtual Guid LoaiKhoanChiID { get; set; }
+        [ForeignKey(nameof(LoaiKhoanChiID))]
         //Lien ket voi danh muc doanh thu
-        public virtual DanhMucKhoanThu KhoanThus { get; set; }
+        public virtual DanhMucKhoanChi KhoanChis { get; set; }
 
         ////Tu dong lay gia tri khi chon danh muc khoan thu
         //private DanhMucKhoanThu _khoanThu;
